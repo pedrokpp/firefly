@@ -149,10 +149,10 @@ class Window():
                          [Italic]]]]
     """
     def draw_text(self, text, x, y, size=12, color=(0,0,0),
-                 font_name="Arial", bold=False, italic=False):
+                 font_name="Arial", bold=False, italic=False, file_path=False):
         # Creates a Font from the system fonts
         # SysFont(name, size, bold=False, italic=False) -> Font
-        font = pygame.font.SysFont(font_name, size, bold, italic)
+        font = pygame.font.SysFont(font_name, size, bold, italic) if not file_path else pygame.font.Font(font_name, size)
 
         # Creates a pygame.Surface with the text rendered on it
         # render(text, antialias, color, background=None)->Surface
