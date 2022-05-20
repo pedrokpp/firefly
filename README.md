@@ -3,13 +3,28 @@ Jogo desenvolvido para a aula de Programação de Jogos, Universidade Federal Fl
 
 Utilizamos [PPlay](https://github.com/adonisgasiglia/pplay), uma "framework" baseada no [pygame](https://www.pygame.org/news)
 
-*O PPlay por ser muito antigo, foi brevemente modificado em certos métodos para facilitar o uso entre pygame e PPlay*
+*O PPlay por ser muito antigo, foi modificado em alguns métodos*
+
+## Rodando o jogo
+
+Windows:
+```
+git clone https://github.com/pedrokpp/firefly.git
+cd firefly
+pip install -r requirements.txt
+python main.py
+```
+
+Linux:
+```
+git clone https://github.com/pedrokpp/firefly.git
+cd firefly
+pip3 install -r requirements.txt
+python3 main.py
+```
 
 ## Alunos
-Dawson e Pedro
+[Dawson](https://github.com/dwsoliv73) e [Pedro](https://github.com/pedrokpp)
 
 ## Métodos do PPlay atualizados
-As mudanças mais relevantes serão documentadas aqui, caso queira ver exatamente quais features foram adicionadas e tiradas, basta olhar nos commits
-
- - `Window.draw_text`
-    - Para facilitar a portabilidade do jogo, foi adicionado um argumento adicional `file_path: bool` para indicar se `font_name` é um path e não um nome
+Diversos métodos do PPlay foram atualizados e podem ser encontrados nos commits relacionados à pasta PPlay
