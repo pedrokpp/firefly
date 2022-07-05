@@ -148,7 +148,7 @@ class Window():
                    [Bold,
                          [Italic]]]]
     """
-    def draw_text(self, text, x, y, size=12, color=(0,0,0),
+    def draw_text(self, text, x=0, y=0, size=12, color=(0,0,0),
                  font_name="Arial", bold=False, italic=False, file_path=False, centered=False, screen_width=0, screen_height=0):
         # Creates a Font from the system fonts
         # SysFont(name, size, bold=False, italic=False) -> Font
