@@ -25,6 +25,9 @@ class MainMenu(Menu):
             button = btn[1]
             button.set_position(window.width / 2 - button.width / 2, 430 + (i*button.height) + (i*30))
         
+        self.clouds = Sprite('./assets/background_inicial.png')
+        self.clouds.y = window.height - self.clouds.height
+        
         self.last_time = round(time() * 1000)
     
     def render(self):
@@ -35,6 +38,7 @@ class MainMenu(Menu):
         window.set_background_color([126, 194, 246])
         lume.draw()
         self.title.draw()
+        self.clouds.draw()
         for btn in self.buttons:
             button = btn[1]
             button.draw()
