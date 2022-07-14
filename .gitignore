@@ -1,6 +1,8 @@
 # ignorar arquivos de "build" e envio
 *.zip
 
+.idea/
+venv/
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
