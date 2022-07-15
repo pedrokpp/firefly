@@ -33,6 +33,7 @@ class MainMenu(Menu):
     def render(self):
         window = self.window
         mouse = window.get_mouse()
+        print(mouse.get_position())
         curr_time = round(time() * 1000)
         lume = self.lumes[self.frame]
         window.set_background_color([126, 194, 246])
