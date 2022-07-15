@@ -14,6 +14,10 @@ Espaço: altera modo de jogo entre mouse e teclado
 
 Setas: Mova Lume nas direções das setas do seu teclado!
 
+> Colete todas as moedas se não perderá vida!
+
+> Pegue powerups para facilitar a run e também corações para recuperar vida
+
 ## Rodando o jogo
 
 Windows:
