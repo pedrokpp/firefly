@@ -2,6 +2,7 @@ from random import randint
 from time import time
 from PPlay.sprite import Sprite
 from PPlay.window import Window
+from PPlay.sound import Sound
 from menus.menu import Menu
 from state_manager import StateManager, State
 from powerups.time_slower import TimeSlower
@@ -32,11 +33,14 @@ class GameMenu(Menu):
             nuvem.y = 0 - nuvem.height - randint(0, 900)
             nuvem.x = randint(-nuvem.width, window.width)
 
+        self.pickup_coin_sound = Sound('./sounds/pickup_coin.wav')
         self.lights = [Sprite('./assets/light.png', 1) for _ in range(4)]
         for light in self.lights:
             light.y = 0 - light.height - randint(0, 1000)
             light.x = randint(0, window.width - light.width)
 
+        self.hurt_sound = Sound('./sounds/hurt.wav')
+        self.heal_sound = Sound('./sounds/heal.wav')
         self.hearts = [Sprite('./assets/heart.png', 1) for _ in range(2)]
         for heart in self.hearts:
             heart.y = 0 - heart.height - randint(0, 2000)
@@ -51,12 +55,17 @@ class GameMenu(Menu):
             ehp.x = self.empty_hps[i - 1].x + ehp.width if i != 0 else 5
             fhp.x = self.full_hps[i - 1].x + fhp.width if i != 0 else 5
 
+        self.powerup_sound = Sound('./sounds/powerup.wav')
         self.powerups = [TimeSlower()]
         for powerup in self.powerups:
             powerup.sprite.y = 0 - powerup.sprite.height - 90
             powerup.sprite.hide()
 
+        self.game_over_sound = Sound('./sounds/game_over.wav')
+        self.sound_flag = True
+
         self.main_timer = Timer()
+        self.kb_timer = Timer()
         self.points = 0
         self.health_points = 10
         self.passive_speed = 1
@@ -64,6 +73,7 @@ class GameMenu(Menu):
         self.powerup_flag = False
 
     def render(self):
+        super().render()
         window = self.window
         kb = window.get_keyboard()
         mouse = window.get_mouse()
@@ -77,6 +87,10 @@ class GameMenu(Menu):
                              centered=True, screen_height=window.height, screen_width=window.width)
             window.update()
 
+            if self.sound_flag:
+                self.game_over_sound.play()
+                self.sound_flag = False
+            
             conquistas = Conquistas()
             highest_score = conquistas.get()
             if self.points > highest_score:
@@ -99,13 +113,13 @@ class GameMenu(Menu):
                 for nuvem in self.nuvens:
                     nuvem.y = 0 - nuvem.height - randint(0, 900)
                     nuvem.x = randint(-nuvem.width, window.width)
+                self.sound_flag = True
             return
 
         if self.main_timer.has_passed(3000):
             self.passive_speed = round(1.08 * self.passive_speed, 2)
             if self.passive_speed >= 20:
                 self.passive_speed = 20
-            print("dificuldade aumentada", self.passive_speed)
             self.main_timer.reset_timer()
 
         for nuvem in self.nuvens:
@@ -120,10 +134,12 @@ class GameMenu(Menu):
             if lume.collided(light) and light.drawable:
                 self.points += 1
                 light.hide()
+                self.pickup_coin_sound.play()
             light.y += self.passive_speed
             if light.y >= window.height:
                 if light.drawable:
                     self.health_points -= 1
+                    self.hurt_sound.play()
                 light.unhide()
                 light.y = 0 - light.height - randint(0, 500)
                 light.x = randint(0, window.width - light.width)
@@ -133,6 +149,7 @@ class GameMenu(Menu):
             if lume.collided(heart) and heart.drawable:
                 self.health_points += 1 if self.health_points < 10 else 0
                 heart.hide()
+                self.heal_sound.play()
             if self.health_points < 10:
                 heart.y += self.passive_speed * 0.8
             elif heart.y > 0:
@@ -151,28 +168,26 @@ class GameMenu(Menu):
         for powerup in self.powerups:
             powerup.sprite.draw()
             if powerup.sprite.y == 0 - powerup.sprite.height - 90:
-                if self.passive_speed >= 4 and randint(0, 100) <= 1 and powerup.has_time_passed(10_000):
+                if self.passive_speed >= 4 and randint(0, 100) <= 1 and powerup.has_time_passed(100_000):
                     powerup.sprite.y += self.passive_speed * 0.9
                     powerup.sprite.x = randint(0, window.width - powerup.sprite.width)
                     powerup.sprite.unhide()
                     powerup.reset_timer()
-                    print("powerup spawned")
             else:
                 powerup.sprite.y += self.passive_speed * 0.9
                 if powerup.active:
                     if not self.powerup_flag:
                         self.passive_speed = round(0.5 * self.passive_speed, 2)
+                        self.powerup_sound.play()
                         self.powerup_flag = True
                     if powerup.has_ended():
                         powerup.deactivate()
                         self.passive_speed = round(2 * self.passive_speed, 2)
                         powerup.sprite.y = 0 - powerup.sprite.height - 90
                         self.powerup_flag = False
-                        print("powerup ended")
                 elif lume.collided(powerup.sprite) and powerup.sprite.drawable:
                     powerup.activate()
                     powerup.sprite.hide()
-                    print("powerup activated")
 
 
         for i, ehp in enumerate(self.empty_hps):
@@ -187,8 +202,9 @@ class GameMenu(Menu):
             self.mouse_clicked = False
             self.lume_timer.reset_timer()
 
-        if kb.key_pressed("space"):
+        if kb.key_pressed("space") and self.kb_timer.has_passed(100):
             self.kb_mode = not self.kb_mode
+            self.kb_timer.reset_timer()
 
         if self.kb_mode:
             if kb.key_pressed("left"):

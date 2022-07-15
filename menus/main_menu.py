@@ -3,6 +3,7 @@ from PPlay.sprite import Sprite
 from PPlay.window import Window
 from menus.menu import Menu
 from state_manager import StateManager, State
+from timer.timer import Timer
 
 class MainMenu(Menu):
     
@@ -28,13 +29,12 @@ class MainMenu(Menu):
         self.clouds = Sprite('./assets/background_inicial.png')
         self.clouds.y = window.height - self.clouds.height
         
-        self.last_time = round(time() * 1000)
+        self.timer = Timer()
     
     def render(self):
+        super().render()
         window = self.window
         mouse = window.get_mouse()
-        print(mouse.get_position())
-        curr_time = round(time() * 1000)
         lume = self.lumes[self.frame]
         window.set_background_color([126, 194, 246])
         lume.draw()
@@ -44,10 +44,10 @@ class MainMenu(Menu):
             button = btn[1]
             button.draw()
         
-        if curr_time - self.last_time > 200:
+        if self.timer.has_passed(200):
             self.frame = 0 if self.frame + 1 == len(self.lumes) else self.frame + 1
-            self.last_time = curr_time
             self.mouse_clicked = False
+            self.timer.reset_timer()
             
         
         if mouse.is_button_pressed(mouse.BUTTON_LEFT) and not self.mouse_clicked:

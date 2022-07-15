@@ -1,5 +1,5 @@
 from PPlay.sprite import Sprite
-from time import time
+from timer.timer import Timer
 
 
 class Powerup:
@@ -8,23 +8,23 @@ class Powerup:
         self.name = name
         self.sprite = Sprite(path)
         self.duration_ms = duration_ms
-        self.init_time = round(time() * 1000)
+        self.duration_timer = Timer()
+        self.cooldown_timer = Timer()
         self.active = False
-        self.init_time_timer = round(time() * 1000)
 
     def has_ended(self):
-        return round(time() * 1000) - self.init_time >= self.duration_ms
+        return self.duration_timer.has_passed(self.duration_ms)
 
     def activate(self):
         self.active = True
-        self.init_time = round(time() * 1000)
+        self.duration_timer.reset_timer()
     
     def deactivate(self):
         self.active = False
     
     def has_time_passed(self, ms):
-        return round(time() * 1000) - self.init_time_timer >= ms
+        return self.cooldown_timer.has_passed(ms)
     
     def reset_timer(self):
-        self.init_time_timer = round(time() * 1000)
+        self.cooldown_timer.reset_timer()
     

@@ -22,6 +22,7 @@ class ConquistasMenu(Menu):
         self.clouds.y = window.height - self.clouds.height
     
     def render(self):
+        super().render()
         window = self.window
         mouse = window.get_mouse()
         window.set_background_color([126, 194, 246])
