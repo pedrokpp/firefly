@@ -5,6 +5,15 @@ Utilizamos [PPlay](https://github.com/adonisgasiglia/pplay), uma "framework" bas
 
 *O PPlay por ser muito antigo, foi modificado em alguns métodos*
 
+## Sobre o jogo
+Firefly é um jogo Endless Runner onde o protagonista Lume se perde de sua família no ínicio de sua vida e durante uma noite, observou as estrelas e deduziu que todos seus familiares estão lá, e por isso, na manhã seguinte ele seguiu em direção as estrelas!
+
+Ajude Lume a chegar no infinito:
+
+Espaço: altera modo de jogo entre mouse e teclado
+
+Setas: Mova Lume nas direções das setas do seu teclado!
+
 ## Rodando o jogo
 
 Windows:
